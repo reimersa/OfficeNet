@@ -1,0 +1,1 @@
+g++ -std=c++0x -Wall -lMinuit Preprocess.C -o preprocess `root-config  --cflags --evelibs`
