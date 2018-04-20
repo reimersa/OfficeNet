@@ -23,7 +23,7 @@ int main(){
   // --------------------------
   
   arma_rng::set_seed_random();
-  double init_epsilon = 0.2;
+  double init_epsilon = 0.12;
   Mat<double> Theta1(3,4,fill::randu), Theta2(3,4,fill::randu), Theta3(1,4,fill::randu);
   Theta1 = Theta1*2*init_epsilon-init_epsilon;
   Theta2 = Theta2*2*init_epsilon-init_epsilon;
@@ -37,8 +37,8 @@ int main(){
 
   // Get training data
   // -----------------
-
-  //test comment test
+  
+  //test comment master
   
   vector<Mat<double>> inputs = InputMatrix();
   Mat<double> X = inputs[0];
