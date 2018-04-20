@@ -38,7 +38,7 @@ int main(){
   // Get training data
   // -----------------
 
-  //test comment
+  //test comment master
   
   vector<Mat<double>> inputs = InputMatrix();
   Mat<double> X = inputs[0];
