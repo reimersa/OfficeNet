@@ -1,3 +1,3 @@
 #include<armadillo>
 
-arma::Mat<double> InputMatrix(int nvars);
+std::vector<arma::Mat<double>> InputMatrix();

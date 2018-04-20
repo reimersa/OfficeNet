@@ -9,7 +9,7 @@
 using namespace std;
 using namespace arma;
 
-Mat<double> InputMatrix(int nvars){
+vector<Mat<double>> InputMatrix(){
 
   // Get pre-processed input rootfiles
   TFile* in_sig = new TFile("../data/Input_LQtoTMuM900.root");
@@ -24,7 +24,7 @@ Mat<double> InputMatrix(int nvars){
   int NBJets_int = 0;
 
   // Set up raw return matrix
-  Mat<double> X;
+  Mat<double> X, y;
 
   // Handle signal tree
   tree_sig->SetBranchAddress("ST", &ST);
@@ -47,11 +47,40 @@ Mat<double> InputMatrix(int nvars){
     double NBJets = (NBJets - 5.) / 1.7;
     
     Mat<double> thisev = {1., ST, STLep, NBJets};
-    if(i==0) X = thisev;
-    else X.insert_rows(0, thisev);
-    
+    Mat<double> y_init = {1.};
+    if(i==0){
+      X = thisev;
+      y = y_init;
+    }
+    else{
+      X.insert_rows(0, thisev);
+      y.insert_rows(0, y_init);
+    }
   }
-  //cout << "X: " << endl << X << endl;
 
-  return X;
+  
+  // Loop over background tree
+  for(unsigned int i=0; i<200; i++){
+    tree_bkg->GetEntry(i);
+
+    // Normalize the features
+
+    //ST in signal has mean 2000, width 500
+    ST = (ST - 2000.) / 500.;
+
+    //STLep: mean 900, width 300
+    STLep = (STLep - 900) / 300;
+
+    //NBJets: mean 5, width 1.7
+    double NBJets = (NBJets - 5.) / 1.7;
+    
+    Mat<double> thisev = {1., ST, STLep, NBJets};
+    Mat<double> y_init = {0.};
+    X.insert_rows(0, thisev);
+    y.insert_rows(0, y_init);
+  }
+
+
+  vector<Mat<double>> ret = {X, y};
+  return ret;
 }

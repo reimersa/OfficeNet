@@ -8,9 +8,9 @@
 using namespace std;
 using namespace arma;
 
-void Prediction(Mat<double> Theta1, Mat<double> Theta2, Mat<double> Theta3, Mat<double> X){
+Mat<double> Prediction(Mat<double> Theta1, Mat<double> Theta2, Mat<double> Theta3, Mat<double> X){
 
-  bool debug = true;
+  bool debug = false;
   if(debug){
     cout << "Theta1: " << endl << Theta1 << endl;
     cout << "X: " << endl << X << endl;
@@ -85,5 +85,5 @@ void Prediction(Mat<double> Theta1, Mat<double> Theta2, Mat<double> Theta3, Mat<
 
 
 
-
+  return a4;
 }
