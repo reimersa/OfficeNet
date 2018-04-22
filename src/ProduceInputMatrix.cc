@@ -9,7 +9,8 @@
 using namespace std;
 using namespace arma;
 
-vector<Mat<double>> InputMatrix(){
+//vector<Mat<double>> ProduceInputMatrix(){
+void ProduceInputMatrix(){
 
   // Get pre-processed input rootfiles
   TFile* in_sig = new TFile("../data/Input_LQtoTMuM900.root");
@@ -32,8 +33,10 @@ vector<Mat<double>> InputMatrix(){
   tree_sig->SetBranchAddress("NBJets", &NBJets_int);
 
   // Loop over signal tree
-  for(unsigned int i=0; i<200; i++){
+  for(unsigned int i=0; i<tree_sig->GetEntries(); i++){
     tree_sig->GetEntry(i);
+    if(i%1000==0) cout << "At sig event no. " << i << endl;
+    if(i>5000) break;
 
     // Normalize the features
 
@@ -60,9 +63,10 @@ vector<Mat<double>> InputMatrix(){
 
   
   // Loop over background tree
-  for(unsigned int i=0; i<200; i++){
+  for(unsigned int i=0; i<tree_bkg->GetEntries(); i++){
     tree_bkg->GetEntry(i);
-
+    if(i%1000==0) cout << "At bkg event no. " << i << endl;
+    if(i>5000) break;
     // Normalize the features
 
     //ST in signal has mean 2000, width 500
@@ -80,7 +84,9 @@ vector<Mat<double>> InputMatrix(){
     y.insert_rows(0, y_init);
   }
 
+  X.save("../data/X.bin");
+  y.save("../data/y.bin");
 
-  vector<Mat<double>> ret = {X, y};
-  return ret;
+  //vector<Mat<double>> ret = {X, y};
+  //return ret;
 }

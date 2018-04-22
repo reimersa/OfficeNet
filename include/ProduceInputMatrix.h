@@ -1,3 +1,4 @@
 #include<armadillo>
 
-std::vector<arma::Mat<double>> InputMatrix();
+//std::vector<arma::Mat<double>> ProduceInputMatrix();
+void ProduceInputMatrix();

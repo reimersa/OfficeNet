@@ -9,6 +9,7 @@
 #include "../include/ProduceInputMatrix.h"
 #include "../include/Prediction.h"
 #include "../include/CostAndGrad.h"
+#include "../include/GradientDescent.h"
 
 using namespace std;
 using namespace arma;
@@ -23,7 +24,7 @@ int main(){
   // --------------------------
   
   arma_rng::set_seed_random();
-  double init_epsilon = 0.12;
+  double init_epsilon = 0.2;
   Mat<double> Theta1(3,4,fill::randu), Theta2(3,4,fill::randu), Theta3(1,4,fill::randu);
   Theta1 = Theta1*2*init_epsilon-init_epsilon;
   Theta2 = Theta2*2*init_epsilon-init_epsilon;
@@ -34,14 +35,19 @@ int main(){
     cout << "Theta 1: " << endl << Theta1 << endl << "Theta 2: " << endl << Theta2 << endl << "Theta 3: " << endl << Theta3 << endl;
   }
 
+  // Produce input matrices from training data
+  // -----------------------------------------
+  //ProduceInputMatrix();
+  
 
   // Get training data
   // -----------------
-  
-  vector<Mat<double>> inputs = InputMatrix();
-  Mat<double> X = inputs[0];
-  Mat<double> y = inputs[1];
-  
+
+  cout << "Getting training data..." << endl;
+  Mat<double> X, y;
+  if(X.load("../data/X.bin") && y.load("../data/y.bin")) cout << "Successfully loaded matrices X and y." << endl;
+  else throw runtime_error("Error when loading input matrices X and y.");
+
   Mat<double> h = Prediction(Theta1, Theta2, Theta3, X);
 
   if(debug){
@@ -52,7 +58,7 @@ int main(){
 
 
   // Compute cost function
-  double lambda = 0.1;
+  double lambda = 0.0;
   double cost = Cost(X, Theta1, Theta2, Theta3, y, lambda);
   if(debug) cout << "Cost: " << cost << endl;
   
@@ -61,7 +67,19 @@ int main(){
     Mat<double> test = {-999, 0., 999};
     cout << "SigmoidGradient on a matrix for [-999, 0., 999] should be [0, 0.25, 0]: " << SigmoidGradient(test) << endl;
   }
+  
+  if(debug){
+    vector<Mat<double>> gradients = Gradient(Theta1, Theta2, Theta3, X, y, lambda);
+    Mat<double> grad1 = gradients[0];
+    Mat<double> grad2 = gradients[1];
+    Mat<double> grad3 = gradients[2];
+    cout << "Gradient 1: " << endl << grad1 << endl << "Gradient 2: " << endl << grad2 << endl << "Gradient 3: " << endl << grad3 << endl;
+  }
 
-  Mat<double> test = Gradient(Theta1, Theta2, Theta3, X, y, lambda);
-    
+  vector<Mat<double>> thetas = GradientDescent(Theta1, Theta2, Theta3, X, y, lambda, 1.0, 5000);
+
+  
 }
+
+  
+
