@@ -1,4 +1,3 @@
 #include<armadillo>
 
-//std::vector<arma::Mat<double>> ProduceInputMatrix();
-void ProduceInputMatrix();
+void ProduceInputMatrix(int nevt, double frac_train, double frac_test, double frac_cv);

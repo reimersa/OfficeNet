@@ -10,14 +10,14 @@
 using namespace std;
 using namespace arma;
 
-double Cost(Mat<double> X, Mat<double> Theta1, Mat<double> Theta2, Mat<double> Theta3, Mat<double> y, double lambda){
+double Cost(Mat<double> X, Mat<double> EventWeight, Mat<double> Theta1, Mat<double> Theta2, Mat<double> Theta3, Mat<double> y, double lambda){
 
   // Get predicted values
   Mat<double> h = Prediction(Theta1, Theta2, Theta3, X);
 
   // Compare prediction and truth to build the cost
   Mat<double> unity = ones<mat>(y.n_rows,1);
-  Mat<double> unregmat = - (y % log(h)) - ((unity - y) % (log(unity - h)));
+  Mat<double> unregmat = (- (y % log(h)) - ((unity - y) % (log(unity - h)))) % EventWeight;
   double cost = accu(unregmat) / X.n_rows;
 
   Mat<double> Th1unreg = Theta1.submat(span(0,Theta1.n_rows-1), span(1,Theta1.n_cols-1));
@@ -31,7 +31,7 @@ double Cost(Mat<double> X, Mat<double> Theta1, Mat<double> Theta2, Mat<double> T
 }
 
 //This is backpropagation
-vector<Mat<double>> Gradient(Mat<double> Theta1, Mat<double> Theta2, Mat<double> Theta3, Mat<double> X, Mat<double> y, double lambda){
+vector<Mat<double>> Gradient(Mat<double> Theta1, Mat<double> Theta2, Mat<double> Theta3, Mat<double> X, Mat<double> y, Mat<double> EventWeight, double lambda){
 
   bool debug = false;
 
@@ -78,7 +78,7 @@ vector<Mat<double>> Gradient(Mat<double> Theta1, Mat<double> Theta2, Mat<double>
 
   // Output layer (4)
   // ----------------
-  Mat<double> d4 = h - y;
+  Mat<double> d4 = (h - y) % EventWeight;
 
   // Second hidden layer (3)
   // -----------------------
@@ -179,8 +179,8 @@ vector<Mat<double>> Gradient(Mat<double> Theta1, Mat<double> Theta2, Mat<double>
       for(unsigned int j=0; j<Theta3.n_cols; j++){
 	Mat<double> epsmat_D3(Theta3.n_rows, Theta3.n_cols, fill::zeros);
 	epsmat_D3.at(i,j) = eps;
-	double cost_D3_up = Cost(X, Theta1, Theta2, Theta3 + epsmat_D3, y, lambda);
-	double cost_D3_down = Cost(X, Theta1, Theta2, Theta3 - epsmat_D3, y, lambda);
+	double cost_D3_up = Cost(X, EventWeight, Theta1, Theta2, Theta3 + epsmat_D3, y, lambda);
+	double cost_D3_down = Cost(X, EventWeight, Theta1, Theta2, Theta3 - epsmat_D3, y, lambda);
       
 	//cout << "cost_D3_up: " << cost_D3_up << ", down: " << cost_D3_down << ", diff/(2e): " << (cost_D3_up - cost_D3_down) / (2*eps) << endl;
   
