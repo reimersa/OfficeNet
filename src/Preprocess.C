@@ -2,11 +2,8 @@
 #include<math.h>
 #include<TString.h>
 #include<TFile.h>
-#include<TTreeReader.h>
 #include<TTree.h>
 #include<TBranch.h>
-#include<TTreeReaderValue.h>
-#include<TTreeReaderArray.h>
 #include<vector>
 
 #include "../include/parameters.h"
@@ -27,8 +24,6 @@ int main(){
 
   for(unsigned int i=0; i<samplenames.size(); i++) Preprocess(inbase+samplenames[i]+".root", outbase+samplenames[i]+".root", debug);
 
-  Preprocess(inbase+"TTbar.root", outbase+"TTbar.root", debug);
-  Preprocess(inbase+"LQtoTMuM900.root", outbase+"LQtoTMuM900.root", debug);
   if(debug) cout << "After Preprocess." << endl;
   return 0;
 
