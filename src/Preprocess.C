@@ -33,6 +33,7 @@ void Preprocess(TString filepath, TString outfilepath, bool debug){
   // Get the file
   //unique_ptr<TFile> infile;
   //infile.reset(new TFile(filepath, "READ"));
+  if(debug) cout << "At sample '" << filepath << "'" << endl;
   TFile* infile = new TFile(filepath, "READ");
   
   // Get AnalysisTree 
