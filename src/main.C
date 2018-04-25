@@ -11,6 +11,7 @@
 #include "../include/CostAndGrad.h"
 #include "../include/GradientDescent.h"
 #include "../include/PlotOutput1d.h"
+#include "../include/PlotROC.h"
 
 using namespace std;
 using namespace arma;
@@ -42,7 +43,7 @@ int main(){
 
   // Produce input matrices from training data
   // -----------------------------------------
-  ProduceInputMatrix(5000, frac_train, frac_test, frac_cv);
+  //ProduceInputMatrix(-1, frac_train, frac_test, frac_cv);
   
   // Get training data
   // -----------------
@@ -92,19 +93,17 @@ int main(){
   // Train OfficeNet and store final Thetas
   // --------------------------------------
 
-  
-  vector<Mat<double>> thetas = GradientDescent(Theta1, Theta2, Theta3, X, X_test, X_cv, y, y_test, y_cv, EventWeight, EventWeight_test, EventWeight_cv, lambda, 30.0, 1000);
+  /*
+  vector<Mat<double>> thetas = GradientDescent(Theta1, Theta2, Theta3, X, X_test, X_cv, y, y_test, y_cv, EventWeight, EventWeight_test, EventWeight_cv, lambda, 300.0, 500);
 
   thetas[0].save("../data/Theta1.bin");
   thetas[1].save("../data/Theta2.bin");
   thetas[2].save("../data/Theta3.bin");
-  
+  */
   
   // Read trained Theta matrices
   // ---------------------------
-  
-  
-  /*
+    
   vector<Mat<double>> thetas;
   Mat<double> theta_tmp;
   theta_tmp.load("../data/Theta1.bin");
@@ -113,7 +112,7 @@ int main(){
   thetas.emplace_back(theta_tmp);
   theta_tmp.load("../data/Theta3.bin");
   thetas.emplace_back(theta_tmp);
-  */
+  
   
   Mat<double> h = Prediction(thetas[0], thetas[1], thetas[2], X);
   if(debug){
@@ -136,7 +135,9 @@ int main(){
   PlotOutput1d(h, y, EventWeight, 0., frac_train, "NNOutput", "Training");
   PlotOutput1d(h, y, EventWeight, frac_train, frac_train+frac_test, "NNOutput", "Test");
   PlotOutput1d(h, y, EventWeight, frac_train+frac_test, 1., "NNOutput", "CV");
-  //cout << "h: " << endl << h << endl;
+  PlotROC(h, y, EventWeight, "ROC", "Training");
+  PlotROC(h, y, EventWeight, "ROC", "Test");
+  PlotROC(h, y, EventWeight, "ROC", "CV");
   
 }
 
