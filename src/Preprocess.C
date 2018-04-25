@@ -1,4 +1,4 @@
-Preprocess(inbase+"LQtoTMuM900.root", outbase+"LQtoTMuM900.root", debug);#include<iostream>
+#include<iostream>
 #include<math.h>
 #include<TString.h>
 #include<TFile.h>
@@ -23,7 +23,7 @@ int main(){
   TString outbase = "/nfs/dust/cms/user/reimersa/LQToTopMu/Run2_80X_v3/OfficeNet/data/Input_";
   if(debug) cout << "Defined in- and outbase." << endl;
 
-  vector<tstring> samplenames = {"TTbar", "DYJets", "LQtoTMuM200", , "LQtoTMuM300", "LQtoTMuM400", "LQtoTMuM500", "LQtoTMuM600", "LQtoTMuM700", "LQtoTMuM800", "LQtoTMuM900", "LQtoTMuM1000", "LQtoTMuM1200", "LQtoTMuM1400", "LQtoTMuM1700", "LQtoTMuM2000"};
+  vector<TString> samplenames = {"TTbar", "DYJets", "LQtoTMuM200", "LQtoTMuM300", "LQtoTMuM400", "LQtoTMuM500", "LQtoTMuM600", "LQtoTMuM700", "LQtoTMuM800", "LQtoTMuM900", "LQtoTMuM1000", "LQtoTMuM1200", "LQtoTMuM1400", "LQtoTMuM1700", "LQtoTMuM2000"};
 
   for(unsigned int i=0; i<samplenames.size(); i++) Preprocess(inbase+samplenames[i]+".root", outbase+samplenames[i]+".root", debug);
 
