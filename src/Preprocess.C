@@ -35,16 +35,20 @@ void Preprocess(TString filepath, TString outfilepath, bool debug){
   //infile.reset(new TFile(filepath, "READ"));
   if(debug) cout << "At sample '" << filepath << "'" << endl;
   TFile* infile = new TFile(filepath, "READ");
+  if(debug) cout << "read file" << endl;
   
   // Get AnalysisTree 
   TTree* tree = (TTree*)infile->Get("AnalysisTree");
+  if(debug) cout << "read tree" << endl;
 
   // Get variables
   tree->SetBranchStatus("*",0);
   for(unsigned int i=0; i<varnames.size(); i++) tree->SetBranchStatus(varnames[i],1); 
+  if(debug) cout << "got variables" << endl;
 
   // Create output file
   TFile* outfile = new TFile(outfilepath, "RECREATE");
+  if(debug) cout << "created outfile" << endl;
 
   // Write branch
   TTree* newtree = (TTree*)tree->CloneTree();
